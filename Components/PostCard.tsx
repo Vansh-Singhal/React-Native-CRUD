@@ -3,17 +3,18 @@ import { Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 type PostCardProps = {
+  id: number;
   identifier: string;
   title: string;
   description: string;
   adminOptions : boolean;
+  DeletePost: (id:number)=> void
 };
 
-const PostCard = memo(({ identifier, title, description, adminOptions = false }: PostCardProps) => {
+const PostCard = memo(({ id, identifier, title, description, adminOptions = false, DeletePost} : PostCardProps) => {
   const navigation = useNavigation();
 
   const goToEdit = () => {};
-  const DeletePost = () => {};
 
   return (
     <View className="bg-white rounded-xl shadow-md p-4 mb-4 w-full border border-gray-200">
@@ -45,7 +46,7 @@ const PostCard = memo(({ identifier, title, description, adminOptions = false }:
 
         <TouchableOpacity
           className="bg-red-500 px-4 py-2 rounded-lg"
-          onPress={DeletePost}
+          onPress={()=>{ DeletePost?.(id) }}
         >
           <Text className="text-white font-semibold">Delete</Text>
         </TouchableOpacity>

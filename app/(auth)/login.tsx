@@ -15,7 +15,7 @@ const Login = () => {
         const user = JSON.parse(storedUser);
 
         if (user.contact === contact) {
-          await AsyncStorage.setItem("logged_user", contact);
+          await AsyncStorage.setItem("logged_user", storedUser);
           console.log("Login successful", user);
           router.push("../home");
         } else {
