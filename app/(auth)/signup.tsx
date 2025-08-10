@@ -1,13 +1,27 @@
 import { Link } from "expo-router";
 import React, { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+interface User {
+  name: string;
+  contact: string;
+}
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
 
-  const signup = () => {
-    console.log("signup");
+  const signuphandler = async () => {
+    let user: User = { name, contact };
+    const jsonValue = JSON.stringify(user);
+
+    try {
+      await AsyncStorage.setItem("user", jsonValue); //We can use API call on a live app instead 
+      console.log("User saved successfully");
+    } catch (e) {
+      console.error("Failed to save user:", e);
+    }
   };
 
   return (
@@ -40,7 +54,7 @@ const Signup = () => {
         <View className="items-center mx-8 gap-2">
           <TouchableOpacity
             className="bg-blue-600 rounded-lg py-3 items-center mx-8 w-full"
-            onPress={signup}
+            onPress={signuphandler}
             activeOpacity={0.8}
           >
             <Text className="text-white font-semibold text-lg">Log In</Text>

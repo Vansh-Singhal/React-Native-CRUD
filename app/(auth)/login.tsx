@@ -1,12 +1,32 @@
-import { Link } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const Login = () => {
   const [contact, setContact] = useState("");
+  const router = useRouter();
 
-  const login = () => {
-    console.log("login clicked");
+  const loginhandler = async () => {
+    try {
+      const storedUser = await AsyncStorage.getItem("user");
+
+      if (storedUser !== null) {
+        const user = JSON.parse(storedUser);
+
+        if (user.contact === contact) {
+          await AsyncStorage.setItem("logged_user", contact);
+          console.log("Login successful", user);
+          router.push("../home");
+        } else {
+          console.log("Invalid contact number");
+        }
+      } else {
+        console.log("No user found. Please sign up first.");
+      }
+    } catch (e) {
+      console.error("Login error:", e);
+    }
   };
   return (
     <View className="flex-1 bg-white justify-center py-8 gap-8">
@@ -29,7 +49,7 @@ const Login = () => {
       <View className="items-center mx-8 gap-2">
         <TouchableOpacity
           className="bg-blue-600 rounded-lg py-3 items-center mx-8 w-full"
-          onPress={login}
+          onPress={loginhandler}
           activeOpacity={0.8}
         >
           <Text className="text-white font-semibold text-lg">Log In</Text>

@@ -13,7 +13,7 @@ const _layout = () => {
     >
       <Tabs.Screen name="home" options={{ title: "Home" }} />
       <Tabs.Screen name="createpost" options={{ title: "Create" }} />
-      <Tabs.Screen name="editpost" options={{ title: "Edit" }} />
+      <Tabs.Screen name="mypost" options={{ title: "My Posts" }} />
     </Tabs>
   );
 };

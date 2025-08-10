@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -6,9 +6,10 @@ type PostCardProps = {
   identifier: string;
   title: string;
   description: string;
+  adminOptions : boolean;
 };
 
-const PostCard = ({ identifier, title, description }: PostCardProps) => {
+const PostCard = memo(({ identifier, title, description, adminOptions = false }: PostCardProps) => {
   const navigation = useNavigation();
 
   const goToEdit = () => {};
@@ -34,7 +35,7 @@ const PostCard = ({ identifier, title, description }: PostCardProps) => {
         </Text>
       </View>
 
-      <View className="flex-row mt-4 gap-2">
+      {adminOptions && <View className="flex-row mt-4 gap-2">
         <TouchableOpacity
           className="bg-yellow-500 px-4 py-2 rounded-lg"
           onPress={goToEdit}
@@ -48,9 +49,9 @@ const PostCard = ({ identifier, title, description }: PostCardProps) => {
         >
           <Text className="text-white font-semibold">Delete</Text>
         </TouchableOpacity>
-      </View>
+      </View>}
     </View>
   );
-};
+});
 
 export default PostCard;

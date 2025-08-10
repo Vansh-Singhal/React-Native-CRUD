@@ -1,5 +1,5 @@
-import { FlatList, Text, View } from "react-native";
-import React from "react";
+import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
 import PostCard from "@/Components/PostCard";
 
 const posts = [
@@ -75,14 +75,18 @@ const posts = [
   },
 ];
 
-const Home = () => {
+const MyPosts = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
   const showItem = ({ item }: { item: any }) => {
-    return <PostCard {...item} />;
+    return <PostCard {...item } adminOptions={true} />;
   };
 
   return (
-    <View className="flex-1 bg-white gap-4 px-4">
-      <Text className="text-xl font-semibold">Home</Text>
+    <View className="flex-1 bg-white gap-8 px-4">
+      <Text className="text-xl font-semibold">My Posts</Text>
+
       <FlatList
         data={posts}
         renderItem={showItem}
@@ -92,4 +96,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default MyPosts;
