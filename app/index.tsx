@@ -1,57 +1,25 @@
 import "@/global.css";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Link, useRouter } from "expo-router";
+import { RootState } from "@/redux/store";
+import { useRouter } from "expo-router";
 import { useEffect } from "react";
-import { Button, Text, View } from "react-native";
+import { InteractionManager, View } from "react-native";
+import { useSelector } from "react-redux";
 
 export default function Index() {
-  
   const router = useRouter();
+  const storedUser = useSelector((state: RootState) => state.auth.logged_user);
 
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const user = await AsyncStorage.getItem("logged_user");
-
-        if (user) {
-          router.replace("/(app)/home");
-        } else {
-          router.replace("/(auth)/signup");
-        }
-      } catch (e) {
-        console.error("Failed to read AsyncStorage:", e);
-        router.replace("/(auth)/signup"); // fallback
+    const task = InteractionManager.runAfterInteractions(() => {
+      if (storedUser) {
+        router.replace("/(app)/home");
+      } else {
+        router.replace("/(auth)/signup");
       }
-    };
-
-    // Defer navigation until after initial render
-    requestAnimationFrame(() => {
-      checkUser();
     });
-  }, []);
 
-  return (
-    <View className="flex-1 bg-white justify-between">
-      {/* <View>
-        <Text className="text-xl font-bold">AUTH</Text>
-        <View className="flex-row gap-4">
-          <Link href="../login" asChild>
-            <Button title="Login" />
-          </Link>
-          <Link href="../signup" asChild>
-            <Button title="Signup" />
-          </Link>
-        </View>
-      </View>
+    return () => task.cancel();
+  }, [storedUser, router]);
 
-      <View>
-        <Text className="text-xl font-bold">APP</Text>
-        <View className="flex-row gap-4">
-          <Link href="../home" asChild>
-            <Button title="Home" />
-          </Link>
-        </View>
-      </View> */}
-    </View>
-  );
+  return <View className="flex-1" />;
 }

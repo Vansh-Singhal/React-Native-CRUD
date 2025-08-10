@@ -1,36 +1,31 @@
-// import { Post } from "@/types/PostValidation";
-// import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { User } from "@/types/UserValidation";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// interface PostsState {
-//   data: Post[];
-// }
+interface AuthState {
+  Users: User[];
+  logged_user: User | null;
+}
 
-// const initialState: PostsState = {
-//   data: [],
-// };
+const initialState: AuthState = {
+  Users: [],
+  logged_user: null,
+};
 
-// const postsSlice = createSlice({
-//   name: "posts",
-//   initialState,
-//   reducers: {
-//     loadPosts: (state, action: PayloadAction<Post[]>) => {
-//       state.data = action.payload;
-//     },
-//     addPost: (state, action: PayloadAction<Post>) => {
-//       state.data.unshift(action.payload);
-//     },
-//     updatePost: (state, action: PayloadAction<Post>) => {
-//       const index = state.data.findIndex((p) => p.id === action.payload.id);
-//       if (index !== -1) {
-//         state.data[index] = action.payload;
-//       }
-//     },
-//     deletePost: (state, action: PayloadAction<number>) => {
-//       state.data = state.data.filter((p) => p.id !== action.payload);
-//     },
-//   },
-// });
+const authSlice = createSlice({
+  name: "auth",
+  initialState,
+  reducers: {
+    signup: (state, action: PayloadAction<User>) => {
+      state.Users.unshift(action.payload);
+    },
+    login: (state, action: PayloadAction<User>) => {
+      state.logged_user = action.payload;
+    },
+    logout: (state) => {
+      state.logged_user = null;
+    },
+  },
+});
 
-
-// export const { loadPosts, addPost, updatePost, deletePost } = postsSlice.actions;
-// export default postsSlice.reducer;
+export const { signup, login, logout } = authSlice.actions;
+export default authSlice.reducer;

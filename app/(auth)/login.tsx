@@ -1,28 +1,26 @@
+import { login } from "@/redux/slices/authSlice";
+import { AppDispatch, RootState } from "@/redux/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 const Login = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [contact, setContact] = useState("");
   const router = useRouter();
+  const users = useSelector((state: RootState) => state.auth.Users);
 
   const loginhandler = async () => {
     try {
-      const storedUser = await AsyncStorage.getItem("user");
-
-      if (storedUser !== null) {
-        const user = JSON.parse(storedUser);
-
-        if (user.contact === contact) {
-          await AsyncStorage.setItem("logged_user", storedUser);
-          console.log("Login successful", user);
-          router.push("../home");
-        } else {
-          console.log("Invalid contact number");
-        }
+      const user = users.find((u) => u.contact === contact.trim());
+      if (user) {
+        dispatch(login(user));
+        console.log("Login successful", user);
+        router.push("/(app)/home");
       } else {
-        console.log("No user found. Please sign up first.");
+        Alert.alert("Invalid contact number or user not found.");
       }
     } catch (e) {
       console.error("Login error:", e);

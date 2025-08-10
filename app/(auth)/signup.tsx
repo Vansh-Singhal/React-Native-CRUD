@@ -1,24 +1,23 @@
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-interface User {
-  name: string;
-  contact: string;
-}
+import { User } from "@/types/UserValidation";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "@/redux/store";
+import { signup } from "@/redux/slices/authSlice";
 
 const Signup = () => {
-  const [name, setName] = useState("");
-  const [contact, setContact] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+  const [name, setName] = useState<string>("");
+  const [contact, setContact] = useState<string>("");
+  const router = useRouter();
 
   const signuphandler = async () => {
-    let user: User = { name, contact };
-    const jsonValue = JSON.stringify(user);
-
     try {
-      await AsyncStorage.setItem("user", jsonValue); //We can use API call on a live app instead 
+      let user: User = { name, contact };
+      dispatch(signup(user)); //We can use API call on a live app instead
       console.log("User saved successfully");
+      router.push("./login");
     } catch (e) {
       console.error("Failed to save user:", e);
     }

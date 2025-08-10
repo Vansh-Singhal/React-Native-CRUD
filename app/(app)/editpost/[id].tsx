@@ -1,45 +1,53 @@
-import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Post } from "@/types/PostValidation";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { addPost } from "@/redux/slices/postsSlice";
+import { updatePost } from "@/redux/slices/postsSlice";
 import { AppDispatch, RootState } from "@/redux/store";
+import { Post } from "@/types/PostValidation";
+import { RouteProp } from "@react-navigation/native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
-function randomIntFromInterval(min: number, max: number):number {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
+type EditPostRouteProp = RouteProp<{ params: { id: number } }, "params">;
 
-const CreatePost = () => {
+const EditPost = () => {
   const dispatch = useDispatch<AppDispatch>();
-  let user = useSelector((state: RootState) => state.auth.logged_user);
+  const router = useRouter();
+  const { id } = useLocalSearchParams();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const addPostHandler = () => {
-    if (!title.trim() || !description.trim()) {
-      Alert.alert("Validation Error", "Title and description are required.");
+  const postId = Number(id);
+  const post = useSelector((state: RootState) =>
+    state.posts.data.find((p) => p.id === postId)
+  );
+
+  useEffect(() => {
+    if (post) {
+      setTitle(post.title);
+      setDescription(post.description);
+    }
+  }, [post]);
+
+  const editPostHandler = () => {
+    if (!post) {
+      Alert.alert("Post not found", "Unable to find the post to edit.");
       return;
     }
 
-    const newPost: Post = {
-      id: randomIntFromInterval(1, 100000),
-      identifier: user?.name || "User",
+    const updatedPost: Post = {
+      ...post,
       title: title.trim(),
       description: description.trim(),
     };
 
-    dispatch(addPost(newPost));
-    setTitle("");
-    setDescription("");
-
-    Alert.alert("Success", "Your post has been created.");
-    console.log("NEW POST ADDED", newPost);
+    dispatch(updatePost(updatedPost));
+    router.replace("/(app)/home");
   };
 
   return (
     <View className="flex-1 bg-white gap-8 px-4">
-      <Text className="text-xl font-semibold">Create Post</Text>
+      <Text className="text-xl font-semibold">Edit Post</Text>
       <View className="gap-2">
         <TextInput
           className="bg-gray-100 border rounded-lg px-4 py-3 mx-8"
@@ -60,7 +68,7 @@ const CreatePost = () => {
       <View className="items-center mx-8 gap-2">
         <TouchableOpacity
           className="bg-blue-600 rounded-lg py-3 items-center mx-8 w-full"
-          onPress={addPostHandler}
+          onPress={editPostHandler}
           activeOpacity={0.8}
         >
           <Text className="text-white font-semibold text-lg">Confirm Post</Text>
@@ -70,4 +78,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default EditPost;

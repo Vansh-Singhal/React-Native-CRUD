@@ -8,7 +8,11 @@ const _layout = () => {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "#2563eb",
-        tabBarIcon: () => null,
+        tabBarIconStyle: { display: "none" }, // Removes space for icon
+        tabBarLabelStyle: {
+          fontSize: 14,
+          fontWeight: "600",
+        },
       }}
     >
       <Tabs.Screen name="home" options={{ title: "Home" }} />

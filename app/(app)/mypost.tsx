@@ -9,13 +9,19 @@ import {
 import React, { useState } from "react";
 import PostCard from "@/Components/PostCard";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 import { deletePost } from "@/redux/slices/postsSlice";
+import { Post } from "@/types/PostValidation";
 
 const MyPosts = () => {
-  const dispatch = useDispatch();
+  let user = useSelector((state: RootState) => state.auth.logged_user);
+
+  const dispatch = useDispatch<AppDispatch>();
   const allPosts = useSelector((state: RootState) => state.posts.data);
-  const posts = allPosts;
+
+  const posts = user
+    ? allPosts.filter((post) => post.identifier === user.name)
+    : [];
 
   const handleDelete = (id: number) => {
     Alert.alert(
@@ -35,7 +41,7 @@ const MyPosts = () => {
     );
   };
 
-  const showItem = ({ item }: { item: any }) => {
+  const renderItem = ({ item }: { item: Post }) => {
     return <PostCard {...item} adminOptions={true} DeletePost={handleDelete} />;
   };
 
@@ -45,7 +51,7 @@ const MyPosts = () => {
 
       <FlatList
         data={posts}
-        renderItem={showItem}
+        renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
       />
     </View>
