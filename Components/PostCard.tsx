@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 
 type PostCardProps = {
   id: number;
@@ -12,9 +12,11 @@ type PostCardProps = {
 };
 
 const PostCard = memo(({ id, identifier, title, description, adminOptions = false, DeletePost} : PostCardProps) => {
-  const navigation = useNavigation();
+  const router = useRouter();
 
-  const goToEdit = () => {};
+  const goToEdit = () => {
+    router.push(`../editpost/${id}`);
+  };
 
   return (
     <View className="bg-white rounded-xl shadow-md p-4 mb-4 w-full border border-gray-200">
