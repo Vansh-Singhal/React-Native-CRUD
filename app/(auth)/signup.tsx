@@ -14,10 +14,13 @@ const Signup = () => {
 
   const signuphandler = async () => {
     try {
-      let user: User = { name, contact };
-      dispatch(signup(user)); //We can use API call on a live app instead
-      console.log("User saved successfully");
-      router.push("./login");
+      if (!name.trim() || !contact.trim() ) console.error("CREDENTIALS NOT FULFILLED");
+      else{
+        let user: User = { name, contact };
+        dispatch(signup(user)); //We can use API call on a live app instead
+        console.log("User saved successfully");
+        router.push("./login");
+      }
     } catch (e) {
       console.error("Failed to save user:", e);
     }

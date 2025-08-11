@@ -1,5 +1,6 @@
 import {
   Alert,
+  Button,
   FlatList,
   Text,
   TextInput,
@@ -12,10 +13,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { deletePost } from "@/redux/slices/postsSlice";
 import { Post } from "@/types/PostValidation";
+import { logout } from "@/redux/slices/authSlice";
+import { useRouter } from "expo-router";
 
 const MyPosts = () => {
   let user = useSelector((state: RootState) => state.auth.logged_user);
 
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const allPosts = useSelector((state: RootState) => state.posts.data);
 
@@ -45,10 +49,19 @@ const MyPosts = () => {
     return <PostCard {...item} adminOptions={true} DeletePost={handleDelete} />;
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("../login");
+  };
+
   return (
     <View className="flex-1 bg-white gap-8 px-4">
-      <Text className="text-xl font-semibold">My Posts</Text>
-
+      <View className="flex-row justify-between items-center">
+        <Text className="text-xl font-semibold">My Posts</Text>
+        <TouchableOpacity onPress={handleLogout}>
+          <Text className="text-blue-500 text-base">Logout</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={posts}
         renderItem={renderItem}

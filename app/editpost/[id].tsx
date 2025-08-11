@@ -1,23 +1,25 @@
 import { updatePost } from "@/redux/slices/postsSlice";
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 import { Post } from "@/types/PostValidation";
 import { RouteProp } from "@react-navigation/native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 type EditPostRouteProp = RouteProp<{ params: { id: number } }, "params">;
 
 const EditPost = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+  const { id } = useLocalSearchParams();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const { id } = useLocalSearchParams();
-  const router = useRouter();
 
+  const postId = Number(id);
   const post = useSelector((state: RootState) =>
-    state.posts.data.find((p) => p.id.toString() === id)
+    state.posts.data.find((p) => p.id === postId)
   );
 
   useEffect(() => {
@@ -28,15 +30,19 @@ const EditPost = () => {
   }, [post]);
 
   const editPostHandler = () => {
+    if (!post) {
+      Alert.alert("Post not found", "Unable to find the post to edit.");
+      return;
+    }
+
     const updatedPost: Post = {
-      identifier: post?.identifier || "User",
-      id: Number(id),
+      ...post,
       title: title.trim(),
       description: description.trim(),
     };
 
     dispatch(updatePost(updatedPost));
-    router.push("../home");
+    router.replace("/(app)/home");
   };
 
   return (

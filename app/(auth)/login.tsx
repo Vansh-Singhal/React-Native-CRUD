@@ -14,6 +14,10 @@ const Login = () => {
 
   const loginhandler = async () => {
     try {
+      if (!contact.trim()){
+      console.error("Input a valid contact");
+      return;
+      }  
       const user = users.find((u) => u.contact === contact.trim());
       if (user) {
         dispatch(login(user));
