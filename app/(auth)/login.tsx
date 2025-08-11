@@ -14,17 +14,12 @@ const Login = () => {
 
   const loginhandler = async () => {
     try {
-      if (!contact.trim()){
-      console.error("Input a valid contact");
-      return;
-      }  
       const user = users.find((u) => u.contact === contact.trim());
       if (user) {
         dispatch(login(user));
-        console.log("Login successful", user);
         router.push("/(app)/home");
       } else {
-        Alert.alert("Invalid contact number or user not found.");
+        Alert.alert("Validation Error","Invalid contact number or user not found.");
       }
     } catch (e) {
       console.error("Login error:", e);

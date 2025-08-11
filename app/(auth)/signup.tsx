@@ -1,6 +1,6 @@
 import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { User } from "@/types/UserValidation";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/redux/store";
@@ -14,11 +14,10 @@ const Signup = () => {
 
   const signuphandler = async () => {
     try {
-      if (!name.trim() || !contact.trim() ) console.error("CREDENTIALS NOT FULFILLED");
+      if (!name.trim() || !contact.trim() ) Alert.alert("Validation Error","Enter required credentials");
       else{
         let user: User = { name, contact };
         dispatch(signup(user)); //We can use API call on a live app instead
-        console.log("User saved successfully");
         router.push("./login");
       }
     } catch (e) {

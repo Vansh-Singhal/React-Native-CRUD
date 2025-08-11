@@ -35,12 +35,17 @@ const Home = () => {
           <Text className="text-blue-500 text-base">Logout</Text>
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={posts}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-      />
+
+      {posts.length > 0 ? (
+        <FlatList
+          data={posts}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <Text className="text-base">Nothing to see...</Text>
+      )}
     </View>
   );
 };

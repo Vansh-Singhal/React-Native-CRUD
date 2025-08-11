@@ -34,7 +34,6 @@ const CreatePost = () => {
     setDescription("");
 
     Alert.alert("Success", "Your post has been created.");
-    console.log("NEW POST ADDED", newPost);
   };
 
   return (
