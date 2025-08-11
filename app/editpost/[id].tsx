@@ -50,14 +50,14 @@ const EditPost = () => {
       <Text className="text-xl font-semibold">Edit Post</Text>
       <View className="gap-2">
         <TextInput
-          className="bg-gray-100 border rounded-lg px-4 py-3 mx-8"
+          className="bg-gray-100 border rounded-lg px-4 py-3 mx-8 text-black"
           placeholder="Title goes here"
           placeholderTextColor="#9CA3AF"
           onChangeText={setTitle}
           value={title}
         />
         <TextInput
-          className="bg-gray-100 border rounded-lg px-4 py-3 mx-8"
+          className="bg-gray-100 border rounded-lg px-4 py-3 mx-8 text-black"
           placeholder="Decription..."
           placeholderTextColor="#9CA3AF"
           onChangeText={setDescription}

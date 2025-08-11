@@ -6,7 +6,7 @@ import store from "@/redux/store";
 export default function RootLayout() {
   return (
     <Provider store={store}>
-      <SafeAreaView className="flex-1" edges={["top", "bottom"]}>
+      <SafeAreaView className="flex-1" edges={["top", "bottom", "left","right"]}>
         <Stack screenOptions={{ headerShown: false }} />
       </SafeAreaView>
     </Provider>

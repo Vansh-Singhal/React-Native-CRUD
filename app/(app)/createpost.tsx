@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { addPost } from "@/redux/slices/postsSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 
-function randomIntFromInterval(min: number, max: number):number {
+function randomIntFromInterval(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
@@ -17,6 +17,11 @@ const CreatePost = () => {
   const [description, setDescription] = useState("");
 
   const addPostHandler = () => {
+    if (!user) {
+      Alert.alert("Unauthorised Access", "Please Login first");
+      return;
+    }
+
     if (!title.trim() || !description.trim()) {
       Alert.alert("Validation Error", "Title and description are required.");
       return;
@@ -24,7 +29,7 @@ const CreatePost = () => {
 
     const newPost: Post = {
       id: randomIntFromInterval(1, 100000),
-      identifier: user?.name || "User",
+      identifier: user.name,
       title: title.trim(),
       description: description.trim(),
     };
@@ -41,14 +46,14 @@ const CreatePost = () => {
       <Text className="text-xl font-semibold">Create Post</Text>
       <View className="gap-2">
         <TextInput
-          className="bg-gray-100 border rounded-lg px-4 py-3 mx-8"
+          className="bg-gray-100 border rounded-lg px-4 py-3 mx-8 text-black"
           placeholder="Title goes here"
           placeholderTextColor="#9CA3AF"
           onChangeText={setTitle}
           value={title}
         />
         <TextInput
-          className="bg-gray-100 border rounded-lg px-4 py-3 mx-8"
+          className="bg-gray-100 border rounded-lg px-4 py-3 mx-8 text-black"
           placeholder="Decription..."
           placeholderTextColor="#9CA3AF"
           onChangeText={setDescription}

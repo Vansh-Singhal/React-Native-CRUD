@@ -1,12 +1,22 @@
 import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from "react-native";
 import { User } from "@/types/UserValidation";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/redux/store";
 import { signup } from "@/redux/slices/authSlice";
 
 const Signup = () => {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
+
   const dispatch = useDispatch<AppDispatch>();
   const [name, setName] = useState<string>("");
   const [contact, setContact] = useState<string>("");
@@ -14,8 +24,9 @@ const Signup = () => {
 
   const signuphandler = async () => {
     try {
-      if (!name.trim() || !contact.trim() ) Alert.alert("Validation Error","Enter required credentials");
-      else{
+      if (!name.trim() || !contact.trim())
+        Alert.alert("Validation Error", "Enter required credentials");
+      else {
         let user: User = { name, contact };
         dispatch(signup(user)); //We can use API call on a live app instead
         router.push("./login");
@@ -35,7 +46,7 @@ const Signup = () => {
       <View className="gap-8">
         <View className="gap-2">
           <TextInput
-            className="bg-gray-100 border rounded-lg px-4 py-3 mx-8"
+            className="border rounded-lg px-4 py-3 mx-8 bg-gray-100 text-black"
             placeholder="Full Name"
             placeholderTextColor="#9CA3AF"
             onChangeText={setName}
@@ -43,7 +54,7 @@ const Signup = () => {
           />
 
           <TextInput
-            className="bg-gray-100 border rounded-lg px-4 py-3 mx-8"
+            className="bg-gray-100 border rounded-lg px-4 py-3 mx-8 text-black"
             placeholder="Contact Number"
             placeholderTextColor="#9CA3AF"
             keyboardType="phone-pad"

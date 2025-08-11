@@ -34,7 +34,7 @@ const Login = () => {
 
       <View className="gap-8">
         <TextInput
-          className="bg-gray-100 border rounded-lg px-4 py-3 mx-8"
+          className="bg-gray-100 border rounded-lg px-4 py-3 mx-8 text-black"
           placeholder="Contact Number"
           placeholderTextColor="#9CA3AF"
           keyboardType="phone-pad"
